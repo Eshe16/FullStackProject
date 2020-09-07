@@ -2,21 +2,55 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const App = (props) => {
-  const [Selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(0)
+  const [currentAnecdotes,setcurrentAncedots] = useState(anecdotes[0])
+  const [maxVoteAncedote,setmaxVoteancedot] = useState("")
   const [counter, setCounter] = useState(0)
+  const [point,setPoint] = useState([0,0,0,0,0,0])
  
-  const value = anecdotes[Math.floor(Math.random()*anecdotes.length)]
+ 
+  const vote =()=>{
+    const copy = [...point]
+    copy[selected] += 1 
+    setPoint(copy)
+    console.log(point);
+    
+    maxVoteMaker()
+    
+  }
+
+  const makeAncedotes=()=>{
+    const value = Math.floor(Math.random()*anecdotes.length)
+    setSelected(value)
+    setcurrentAncedots(anecdotes[value])
+  }
+
+  let  max = Math.max(...point)
+  let maxindex = point.indexOf(max)
+  
+  const maxVoteMaker =()=>{
+  
+    max = Math.max(...point)
+    maxindex = point.indexOf(max)
+    console.log("maxxidx",maxindex);
+    setmaxVoteancedot(anecdotes[maxindex])
+   
+
+  } 
   
   return (
     <div>
-      <p>{value}</p>
-      <p>has {counter} votes</p>
-      <button onClick={() => setCounter(counter+1)}>
+      <p>{currentAnecdotes}</p>
+      <p>has {point[selected]} votes</p>
+      <button onClick={vote}>
         vote
       </button>
-      <button onClick={() => setSelected({value})}>
+      <button onClick={makeAncedotes}>
         next anecdotes
       </button>
+      <h2>Ancedotes with the most vote</h2>
+     <p>{maxVoteAncedote} has {max} votes </p>
+
     </div>
   )
 }
