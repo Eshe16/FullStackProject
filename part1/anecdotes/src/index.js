@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const App = (props) => {
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(anecdotes[0])
   const [currentAnecdotes,setcurrentAncedots] = useState(anecdotes[0])
+
   const [maxVoteAncedote,setmaxVoteancedot] = useState("")
-  const [counter, setCounter] = useState(0)
+
   const [point,setPoint] = useState([0,0,0,0,0,0])
  
  
@@ -13,9 +14,9 @@ const App = (props) => {
     const copy = [...point]
     copy[selected] += 1 
     setPoint(copy)
-    console.log(point);
+    console.log(copy);
     
-    maxVoteMaker()
+    maxVoteMaker(copy)
     
   }
 
@@ -28,13 +29,14 @@ const App = (props) => {
   let  max = Math.max(...point)
   let maxindex = point.indexOf(max)
   
-  const maxVoteMaker =()=>{
-  
-    max = Math.max(...point)
-    maxindex = point.indexOf(max)
-    console.log("maxxidx",maxindex);
+  const maxVoteMaker =(copy)=>{
+  console.log(...copy);
+    max = max = Math.max(...copy)
+    console.log(max);
+    maxindex = copy.indexOf(max)
+  console.log(maxindex);
     setmaxVoteancedot(anecdotes[maxindex])
-   
+    
 
   } 
   
