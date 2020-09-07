@@ -1,30 +1,20 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const Statistics = (props) => {
-  const sum = props.Good + props.Neutral + props.Bad;
-  const all = props.Good + props.Neutral + props.Bad;
-  const average = sum !== 0 ? (props.Good - props.Bad) / sum : null;
-  const positive = sum !== 0 ? (props.Good / sum) * 100 : null;
+const FeedbackButton = (props) => {
+  return (
+    <div style={{ display: "inline-block" }}>
+      <button onClick={() => props.addFeedback()}>{props.text}</button>
+    </div>
+  );
+};
 
+const Statistics = (props) => {
   return (
     <div>
-
-
-      {all === 0 ? (
-        <h3>no feedback given</h3>
-      ) : (
-        <div>
-          <p>good {props.Good}</p>
-          <p>neutral {props.Neutral}</p>
-          <p>bad {props.Bad}</p>
-          <p>all {all}</p>
-          <p>average {average}</p>
-          <p>positive {positive}%</p>
-        </div>
-      )}
-
-    
+      <p>
+        {props.feedbacktype} {props.value}
+      </p>
     </div>
   );
 };
@@ -35,15 +25,40 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  const addGood = () => {
+    setGood(good + 1);
+  };
+  const addNeutral = () => {
+    setNeutral(neutral + 1);
+  };
+
+  const addBAd = () => {
+    setBad(bad + 1);
+  };
+
+  let all = good + neutral + bad;
+  let average = all !== 0 ? good - bad / all : null;
+  let positive = all !== 0 ? good / all : null;
+
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={() => setGood(good + 1)}>good</button>
-      <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
-      <button onClick={() => setBad(bad + 1)}>bad</button>
+      <FeedbackButton addFeedback={addGood} text="good" />
+      <FeedbackButton addFeedback={addNeutral} text="neutral" />
+      <FeedbackButton addFeedback={addBAd} text="bad" />
       <h1>statistics</h1>
-
-      <Statistics Good={good} Neutral={neutral} Bad={bad} />
+      {all === 0 ? (
+        <h3>no feedback given </h3>
+      ) : (
+        <div>
+          <Statistics feedbacktype="good" value={good} />
+          <Statistics feedbacktype="neutral" value={neutral} />
+          <Statistics feedbacktype="bad" value={bad} />
+          <Statistics feedbacktype="all" value={all} />
+          <Statistics feedbacktype="average" value={average} />
+          <Statistics feedbacktype="positive" value={positive} />
+        </div>
+      )}
     </div>
   );
 };
