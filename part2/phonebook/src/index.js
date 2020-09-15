@@ -17,7 +17,7 @@ const Listofpersons = (props) => {
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas',}
   ]) 
   const [ newName, setNewName ] = useState('')
   
@@ -25,10 +25,11 @@ const App = () => {
 
   const addperson = (event) => {
     event.preventDefault()
+    
   const personsObject = {
       name: newName,
     }
-  
+    persons.some((item) => item.name===newName)?window.alert('the name '+  newName + ' is already added to phonebook'):
     setPersons(persons.concat(personsObject))
     setNewName('')
   }
