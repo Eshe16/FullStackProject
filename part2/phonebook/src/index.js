@@ -15,12 +15,19 @@ const Listofpersons = (props) => {
 
 
 
+
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '0448117010'}
-  ]) 
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ])
+
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const [searchWord, setSearchWord] = useState("");
+  const [filterDisplay, setFilterDisplay] = useState([]);
   
 
 
@@ -34,25 +41,43 @@ const App = () => {
     persons.some((item) => item.name===newName)?window.alert('the name '+  newName + ' is already added to phonebook'):
     setPersons(persons.concat(personsObject))
     setNewName('')
+    setNewNumber('')
   }
 
   
-
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
   
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
     setNewNumber(event.target.value)
   }
+
+  const handleSearchChange = e => {
+    setSearchWord(e);
+let oldPersonList=persons.map(person => {
+  return {name: person.name.toLowerCase(),number: person.number};
+});
+
+  if(searchWord !==" "){
+    let newPersonList= [];
+    newPersonList=oldPersonList.filter(person =>person.name.includes(searchWord.toLowerCase()));
+    setFilterDisplay(newPersonList);
+  }
+   else{
+     setFilterDisplay(persons)
+   }
+  };
 
   
   return (
     
     <div>
       <h2>Phonebook</h2>
+      filter shown with
+      <input value={searchWord} onChange={e =>handleSearchChange(e.target.value)} placeholder="Search for names.." title="Type in a name"></input>
+
+      <h2>Add a new</h2>
       <form onSubmit={addperson}>
         <div>
           name: <input value={newName}
@@ -68,9 +93,8 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
      
-     <Listofpersons personlist={persons} />
-    
-      
+     <Listofpersons personlist={searchWord.length < 1 ? persons:filterDisplay} />
+   
     </div>
   )
 }
