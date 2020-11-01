@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 
 
-const Listofcontries = (props) => {
+const Listofcountries = (props) => {
   return (
     <div>
       {props.countrieslist.map((Listofcontries,i) =>(
@@ -73,7 +73,7 @@ let oldCountriesList=countries.map(country=> {
       find countries
       <input value={searchWord} onChange={e =>handleSearchChange(e.target.value)} placeholder="Search for names.." title="Type in a name"></input>
 
-      <Listofcontries countrieslist={searchWord.length < 1 ? countries:filterDisplay} />
+      <Listofcountries countrieslist={searchWord.length < 1 ? countries:filterDisplay} />
    
     </div>
   )
