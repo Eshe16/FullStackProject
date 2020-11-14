@@ -4,80 +4,82 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 
 
-const Listofcountries = (props) => {
-  return (
-    <div>
-      {props.countrieslist.map((Listofcontries,i) =>(
-        <p key={i}>
-           {Listofcontries.name}   
-        </p>
-      ))}
-    </div>
-  );
-};
- 
-
-
-
 const App = () => {
   const [countries, setCountries] = useState([])
-  const [searchWord, setSearchWord] = useState("");
-  const [filterDisplay, setFilterDisplay] = useState([]);
+  const [newCountries, setNewCountries] = useState([])
+  
   
   useEffect(() => {
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response => {
         const newList = response.data
-        console.log(newList);
         setCountries(newList) 
       })
   }, [])
 
-  /*const addperson = (event) => {
-    event.preventDefault()
-    
-  const countriesObject = {
-      name: newName,
+  const inputHandler = (e) => {
+    const userInput = e.target.value.toLowerCase();
+    const newList = countries.filter((country) =>
+    country.name.toLowerCase().includes(userInput));
+    setNewCountries(newList);
+  };
+  
+
+return (
+  <div>
+    find a country{" "}
+    <input type="text" placeholder="what country" onChange={inputHandler}/>
+    {newCountries.length> 10 && (
+      <p> To many matches, specific another filiter</p>
+    )}
+    {newCountries.length <=10 && newCountries.length > 1 && (
+      <DisplayTenCountries list= {newCountries} />
+    )}
+    {newCountries.length === 1 && (
+      <div>
+        <DisplaySingleCountry country={newCountries[0]} />
+        </div>
+
+    )}
     }
-    countries.some((item) => item.name===newName)?window.alert('the name '+  newName + ' is already added to phonebook'):
-    setCountries(countries.concat(countriesObject))
-    setNewName('')
-  }*/
+  </div>
+);
 
-
-
-
-  const handleSearchChange = e => {
-    setSearchWord(e);
-let oldCountriesList=countries.map(country=> {
-  return {name: country.name.toLowerCase()};
-});
-
-  if(searchWord !==" "){
-    let newCountriesList= [];
-    newCountriesList=oldCountriesList.filter(country =>country.name.toLowerCase().includes(searchWord.toLowerCase()));
-    console.log(newCountriesList);
-    setFilterDisplay(newCountriesList);
-  }
-   else{
-     setFilterDisplay(countries)
-   }
   };
 
-  
-  return (
-    
-    <div>
-      <h2>countries</h2>
-      find countries
-      <input value={searchWord} onChange={e =>handleSearchChange(e.target.value)} placeholder="Search for names.." title="Type in a name"></input>
 
-      <Listofcountries countrieslist={searchWord.length < 1 ? countries:filterDisplay} />
-   
+const DisplayTenCountries= ({ list}) =>{
+  const [displayConstent, setDisplayConstent] = useState([]);
+  const [display, setDisplay] = useState(false);
+
+  const handleShowBtnClick = (e) => {
+    const country = list[e.target.id];
+    setDisplayConstent(country);
+    setDisplay(true);
+  };
+
+return(
+  <div>
+    {list.map((item, i) => (
+   <div key= {i}>
+     {item.name}{" "}
+     <button id={i} onClick={handleShowBtnClick}>show</button>
+     </div>
+    ))}
+    {display && <DisplaySingleCountry country={displayConstent}/>}
+  </div>
+);
+};
+
+const DisplaySingleCountry = ({country}) => {
+  return (
+    <div>
+      <h1>{country.name}</h1>
     </div>
-  )
-}
+  );
+};
+
 
 ReactDOM.render(
   <App />,
